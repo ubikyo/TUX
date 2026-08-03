@@ -1,7 +1,7 @@
 # TUX
 Terminal enhancement for Ubuntu.
 
-> **Note:** Successfully tested on **Ubuntu 18** to **25+**.
+> **Note:** Successfully tested on **Ubuntu 18** to **26+**.
 
 # TUX.motd
 
