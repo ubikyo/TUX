@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # This script should be run via curl:
-# curl https://raw.githubusercontent.com/YerazLab/TUX/refs/heads/main/install.sh | sudo bash -s -
+# curl https://raw.githubusercontent.com/ubikyo/TUX/refs/heads/main/install.sh | sudo bash -s -
 
 PYTHON3=$(which python3)
 
-REPOSITORY="https://github.com/YerazLab/TUX.git"
+REPOSITORY="https://github.com/ubikyo/TUX.git"
 
 SILENT=${SILENT:-no}
 

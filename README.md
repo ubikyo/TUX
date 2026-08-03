@@ -24,13 +24,13 @@ TUX uses glyphs (icons) to display some informations. To view these elements pro
 ## Automatic
 All features will be installed (like the silent flag).
 
-    curl -fs https://raw.githubusercontent.com/YerazLab/TUX/refs/heads/main/install.sh | sudo bash -s -
+    curl -fs https://raw.githubusercontent.com/Ubikyo/TUX/refs/heads/main/install.sh | sudo bash -s -
 
 
 ## Manual
 You will be prompted to select the features to install.
 
-    curl -O https://raw.githubusercontent.com/YerazLab/TUX/refs/heads/main/install.sh
+    curl -O https://raw.githubusercontent.com/Ubikyo/TUX/refs/heads/main/install.sh
     chmod +x ./install.sh
     sudo bash -i ./install.sh
 
