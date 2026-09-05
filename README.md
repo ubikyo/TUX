@@ -5,15 +5,15 @@ Terminal enhancement for Ubuntu.
 
 # TUX.motd
 
-[Awesome MOTD](/modules/tux_motd/README.md) for Ubuntu with system information and more.
+[Awesome MOTD](https://github.com/ubikyo/TUX.motd/blob/main/README.md) for Ubuntu with system information and more.
 
-<img src="ressources/motd.png" width="500">
+<img src="https://raw.githubusercontent.com/Ubikyo/TUX.motd/refs/heads/main/ressources/motd.png" width="500">
 
 # TUX.ps1
 
 Nice optional PS1 prompt.
 
-<img src="ressources/ps1.png" width="600">
+<img src="https://raw.githubusercontent.com/Ubikyo/TUX.ps1/refs/heads/main/ressources/ps1.png" width="600">
 
 # Prerequisites
 
