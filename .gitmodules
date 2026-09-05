@@ -1,0 +1,6 @@
+[submodule "kbrd-os"]
+	path = TUX.motd
+	url = https://github.com/ubikyo/TUX.motd.git
+[submodule "kbrd-dev"]
+	path = TUX.ps1
+	url = https://github.com/ubikyo/TUX.ps1.git

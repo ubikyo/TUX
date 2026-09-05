@@ -1,5 +1,0 @@
-psutil
-colorama
-pyfiglet
-distro
-pyyaml
