@@ -453,6 +453,20 @@ Examples:
 EOF
 }
 
+# Reuse the parent installer's choice, or ask when installing this module separately.
+configure_nerd_fonts() {
+    case "${TUX_NERD_FONTS:-}" in
+        true|false) return 0 ;;
+    esac
+    if print_dialog "${SILENT:-no}" "Enable Nerd Font icons?" \
+        "Display enhanced icons using Nerd Fonts. A compatible Nerd Font must be installed and selected in your terminal for the icons to display correctly."; then
+        TUX_NERD_FONTS=true
+    else
+        TUX_NERD_FONTS=false
+    fi
+    export TUX_NERD_FONTS
+}
+
 main() {
     while [ $# -gt 0 ]; do
         case $1 in
@@ -489,6 +503,7 @@ main() {
     create_venv         || { quit_installation; return; }
     activate_venv       || { quit_installation; return; }
     upgrading_pip       || { quit_installation; return; }
+    configure_nerd_fonts
     install_modules    || { quit_installation; return 1; }
 
     end_message
