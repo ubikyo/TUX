@@ -7,9 +7,13 @@ RUN apt-get update \
         ca-certificates \
         curl \
         git \
+        iproute2 \
         python3 \
         python3-venv \
         sudo \
+        systemd \
+        systemd-resolved \
+        libpam-systemd \
     && rm -rf /var/lib/apt/lists/*
 
 CMD ["/bin/bash"]
