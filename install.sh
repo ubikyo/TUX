@@ -8,6 +8,7 @@ PYTHON3=$(which python3)
 REPOSITORY="https://github.com/ubikyo/TUX.git"
 
 SILENT=${SILENT:-no}
+TUX_BRANCH=${TUX_BRANCH:-}
 
 #= SETTINGS ========================================================================================================
 
@@ -289,7 +290,7 @@ end_message() {
 
 git_clone_or_update() {
     if has_command git; then
-        if [ -d "$REPO_DIR" ] && [ -d "$REPO_DIR/.git" ]; then
+        if [ -d "$REPO_DIR" ] && [ -e "$REPO_DIR/.git" ]; then
             git_update
         else
             git_clone
@@ -301,11 +302,28 @@ git_clone_or_update() {
 
 git_update() {
     print_msg "OK" "GIT" "Updating TUX repository"
-    cd $REPO_DIR
-    if git pull > /dev/null 2>tux_error.log; then
+    cd "$REPO_DIR" || return 1
+    if [ -n "$TUX_BRANCH" ]; then
+        if git fetch origin "$TUX_BRANCH" > /dev/null 2>tux_error.log &&
+           git checkout "$TUX_BRANCH" > /dev/null 2>>tux_error.log; then
+            set_success "GIT" "Selected branch: $TUX_BRANCH"
+        else
+            set_error "GIT" "Unable to select branch: $TUX_BRANCH"
+            return 1
+        fi
+    fi
+    if git pull --ff-only > /dev/null 2>tux_error.log; then
         set_success "GIT" "TUX repository updated successfully"
     else
         set_error "GIT" "TUX repository update error"
+        return 1
+    fi
+
+    if git submodule sync --recursive > /dev/null 2>tux_error.log &&
+       git submodule update --init --recursive > /dev/null 2>>tux_error.log; then
+        set_success "GIT" "Submodules updated successfully"
+    else
+        set_error "GIT" "Submodule update error"
         return 1
     fi
 
@@ -313,10 +331,14 @@ git_update() {
 }
 
 git_clone() {
+    local branch_args=()
+    if [ -n "$TUX_BRANCH" ]; then
+        branch_args=(--branch "$TUX_BRANCH")
+    fi
     print_msg "OK" "GIT" "Cloning TUX repository"
-    if git clone $REPOSITORY $REPO_DIR > /dev/null 2>tux_error.log; then
+    if git clone --recurse-submodules "${branch_args[@]}" "$REPOSITORY" "$REPO_DIR" > /dev/null 2>tux_error.log; then
         set_success "GIT" "TUX repository updated successfully"
-        cd $REPO_DIR
+        cd "$REPO_DIR" || return 1
     else
         set_error "GIT" "TUX repository update error"
         return 1
@@ -383,14 +405,26 @@ print_is_silentmode() {
 
 # Installation des modules
 install_modules() {
-    print_msg "OK" "MODULE" "Start to installing modules"
-    cd modules
+    local modules=("TUX.motd" "TUX.ps1")
+    local module
 
-    for MODULE in */ ; do
-        if [ -f "$MODULE/install.sh" ]; then
-            source "$MODULE/install.sh"
+    print_msg "OK" "MODULE" "Start to installing modules"
+
+    for module in "${modules[@]}"; do
+        if [ ! -f "$REPO_DIR/$module/install.sh" ]; then
+            print_msg "ERROR" "MODULE" "Missing installer: $REPO_DIR/$module/install.sh"
+            return 1
         fi
     done
+
+    for module in "${modules[@]}"; do
+        (
+            cd "$REPO_DIR/$module" || exit 1
+            source "$REPO_DIR/$module/install.sh"
+        ) || return 1
+    done
+
+    return 0
 }
 
 # Affiche l'aide
@@ -402,6 +436,7 @@ Usage: $script [OPTIONS]
 
 Options:
   --silent          Disable all questions and enable all features
+  --branch NAME     Install a specific repository branch
   -h, --help        Show this help message and exit
 
 Examples:
@@ -415,6 +450,14 @@ main() {
         case $1 in
             --silent) 
                 SILENT=yes
+            ;;
+            --branch)
+                if [ -z "${2:-}" ] || [[ "$2" == -* ]]; then
+                    print_msg "ERROR" "SCRIPT" "--branch requires a branch name"
+                    return 1
+                fi
+                TUX_BRANCH="$2"
+                shift
             ;;
             --help|-h)
                 print_help
@@ -438,7 +481,7 @@ main() {
     create_venv         || { quit_installation; return; }
     activate_venv       || { quit_installation; return; }
     upgrading_pip       || { quit_installation; return; }
-    install_modules
+    install_modules    || { quit_installation; return 1; }
 
     end_message
 
