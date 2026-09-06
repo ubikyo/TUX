@@ -231,6 +231,10 @@ dialog() {
     local padding_h=2
     local padding_v=1
     local inner_width=$((box_width - 2 - 2 * padding_h))
+    local description_lines=()
+    if [ -n "${4:-}" ]; then
+        mapfile -t description_lines < <(printf '%s\n' "$4" | fold -s -w "$inner_width")
+    fi
 
     printf '\n\e[?25l'
 
@@ -260,12 +264,16 @@ dialog() {
         box_line "$choice_line"
     }
 
-    local total_lines=$((1 + padding_v + 3 + padding_v + 1))
+    local total_lines=$((1 + padding_v + 3 + ${#description_lines[@]} + padding_v + 1))
 
     draw_dialog() {
         printf "${COLOR_HIGHLIGHT_FG}┌%s┐${COLOR_RESET}\n" "$(printf '─%.0s' $(seq 1 $((box_width-2))))"
         for ((i=0;i<padding_v;i++)); do box_empty $((box_width-2)); done
         box_line "$3"
+        local description_line
+        for description_line in "${description_lines[@]}"; do
+            box_line "\e[90m${description_line}"
+        done
         box_empty $((box_width-2))
         draw_choices "$@"
         for ((i=0;i<padding_v;i++)); do box_empty $((box_width-2)); done
@@ -309,7 +317,7 @@ dialog() {
 # Affiche un dialogue oui/non suivant si l'on est en mode silencieux ou non
 print_dialog() {
     if [[ "$1" == "no" ]] && is_interactive_shell; then
-        dialog "Yes" "No" "${2}"
+        dialog "Yes" "No" "${2}" "${3:-}"
 
         if [ "$REPLY" = "1" ]; then
             return 0
