@@ -140,14 +140,14 @@ is_sourced() {
    return 0
 }
 
-# Détermine si l'on est dans un shell interactif
-is_interactive_shell() {
-    [[ $- == *i* ]]
+# Vérifie si les dialogues peuvent utiliser le terminal, même dans un sous-shell
+has_dialog_terminal() {
+    [[ -t 0 && -t 1 ]]
 }
 
 # Affiche un dialogue oui/non suivant si l'on est en mode silencieux ou non
 print_dialog() {
-    if [[ "$1" == "no" ]] && is_interactive_shell; then
+    if [[ "$1" == "no" ]] && has_dialog_terminal; then
         dialog "Yes" "No" "${2}"
 
         if [ "$REPLY" = "1" ]; then

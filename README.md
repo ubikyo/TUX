@@ -37,7 +37,7 @@ You will be prompted to select the features to install.
     sudo bash -i ./install.sh
 
 > [!WARNING]
-> You need to start the installer as an interactive user (**bash -I**). If you don't, no dialogs will be shown.
+> Questions are shown when the installer runs in a terminal, unless `--silent` is used. Without a terminal (for example, when piping the script into Bash), all options are accepted automatically.
 
 
 ## Parameters
