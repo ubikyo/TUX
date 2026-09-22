@@ -37,13 +37,13 @@ TUX uses optional Nerd Fonts to display enhanced icons and symbols. To view thes
 ## Automatic
 All features will be installed (like the silent flag).
 
-    curl -fs https://raw.githubusercontent.com/Ubikyo/TUX/refs/heads/main/install.sh | sudo bash -s -
+    curl -fsS https://raw.githubusercontent.com/Ubikyo/TUX/refs/heads/main/install.sh | sudo bash -s -
 
 
 ## Manual
 You will be prompted to select the features to install.
 
-    curl -O https://raw.githubusercontent.com/Ubikyo/TUX/refs/heads/main/install.sh
+    curl -fSO https://raw.githubusercontent.com/Ubikyo/TUX/refs/heads/main/install.sh
     chmod +x ./install.sh
     sudo bash -i ./install.sh
 
@@ -56,11 +56,12 @@ You will be prompted to select the features to install.
 | Option | Description |
 |-|-|
 | `--silent` | Disable all questions and enable all features |
+| `--branch NAME` | Install a specific repository branch |
 | `--help` | Show the helper and exit |
 
   
 # Update
 
     cd /opt/TUX/repo
-    git pull
+    sudo git pull --ff-only
     sudo bash -i ./install.sh
