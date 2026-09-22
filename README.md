@@ -11,9 +11,20 @@ Terminal enhancement for Ubuntu.
 
 <img src="https://raw.githubusercontent.com/ubikyo/TUX.motd/refs/heads/dev/ressources/motd.png" width="500">
 
+## Parameters
+
+Options for the `tux_motd` command:
+
+| Option | Description |
+|-|-|
+| `--version` | Display the installed version (currently `1.1`) and exit |
+
 # TUX.ps1
 
 Nice optional PS1 prompt.
+
+Powerline separators remain enabled whether or not Nerd Font icons are enabled.
+Disabling Nerd Font icons hides only the Ubuntu logo block in the prompt.
 
 <img src="https://raw.githubusercontent.com/ubikyo/TUX.ps1/refs/heads/dev/ressources/ps1.png" width="600">
 
